@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Форум</title>
+    <style>
+        body {
+            background-color: #f0f4f8;
+            font-family: Arial, sans-serif;
+            color: #333;
+        }
+        .header {
+            background-color: #ff5a5f;
+            color: white;
+            text-align: center;
+            padding: 10px;
+            font-size: 24px;
+            font-weight: bold;
+            border-radius: 5px;
+        }
+        .chat-header {
+            background-color: #ffffff;
+            color: #4CAF50;
+            text-align: center;
+            padding: 10px;
+            font-size: 18px;
+            border-radius: 5px;
+            margin: 10px;
+        }
+        .messages {
+            padding: 20px;
+        }
+        .message {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+            background: #ffffff;
+            padding: 10px;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            opacity: 0;
+            transform: translateY(10px);
+            transition: opacity 0.5s, transform 0.5s;
+        }
+        .avatar {
+            width: 30px;
+            height: 30px;
+            background-color: #3498db;
+            border-radius: 50%;
+            margin-right: 10px;
+        }
+        .link {
+            color: #007bff;
+            cursor: pointer;
+            text-decoration: underline;
+        }
+        .input-container {
+            display: flex;
+            padding: 10px;
+            border-top: 1px solid #ccc;
+            background: #ffffff;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            margin: 10px;
+        }
+        input {
+            flex: 1;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            outline: none;
+        }
+        button {
+            padding: 10px 15px;
+            margin-left: 5px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">ФОРУМ</div>
+    <div class="chat-header">ЧАТ</div>
+    <div class="messages" id="messages"></div>
+    <div class="input-container">
+        <input type="text" id="userInput" placeholder="введите текст...">
+        <button onclick="sendMessage()">отправить</button>
+    </div>
+
+    <script>
+        const messagesData = [
+            ["Привет!", "Как дела?", "О чем поговорим?"],
+            ["<span class='link' onclick='goToChat()'>Перейти в другой чат</span>"]
+        ];
+        let messageStage = 0;
+
+        function sendMessage() {
+            const input = document.getElementById("userInput");
+            const text = input.value.trim();
+            if (text === "") return;
+
+            addMessage(text, true);
+            input.value = "";
+            setTimeout(() => showNextMessages(messageStage), 1000);
+        }
+
+        function addMessage(text, isUser = false) {
+            const messagesContainer = document.getElementById("messages");
+            const messageDiv = document.createElement("div");
+            messageDiv.classList.add("message");
+            messageDiv.innerHTML = `<div class='avatar' style='background-color: ${isUser ? "#4CAF50" : "#3498db"}'></div> ${text}`;
+            messagesContainer.appendChild(messageDiv);
+            setTimeout(() => {
+                messageDiv.style.opacity = "1";
+                messageDiv.style.transform = "translateY(0)";
+            }, 50);
+        }
+
+        function showNextMessages(stage) {
+            if (stage < messagesData.length) {
+                messagesData[stage].forEach((msg, index) => {
+                    setTimeout(() => addMessage(msg), index * 1000);
+                });
+                messageStage++;
+            }
+        }
+
+        function goToChat() {
+            window.location.href = "chat.html";
+        }
+    </script>
+</body>
+</html>
